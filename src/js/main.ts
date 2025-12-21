@@ -13,6 +13,7 @@ const init = async () => {
   await initI18n();
   injectLanguageSwitcher();
   applyTranslations();
+  document.documentElement.classList.add('i18n-ready');
 
   pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
   if (__SIMPLE_MODE__) {

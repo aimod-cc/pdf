@@ -656,3 +656,12 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none; /* Chrome, Safari, Edge */
   margin: 0;
 }
+
+/* Hide content until i18n is ready to prevent flash of untranslated content */
+html:not(.i18n-ready) body {
+  visibility: hidden;
+}
+
+html.i18n-ready body {
+  visibility: visible;
+}

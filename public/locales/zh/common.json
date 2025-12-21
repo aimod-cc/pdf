@@ -204,7 +204,10 @@
             "您上传的 PDF 的所有页面显示在下方。",
             "只需拖放单个页面缩略图，即可为您新文件对页面进行排序。"
         ],
-        "mergePdfs": "合并 PDF"
+        "mergePdfs": "合并 PDF",
+        "pagesLabel": "页码 (例如 1-3, 5) - 共",
+        "pagesTotal": "页",
+        "leaveBlank": "留空表示所有页面"
     },
     "common": {
         "page": "页",
@@ -222,6 +225,14 @@
         "success": "成功",
         "file": "文件",
         "files": "文件"
+    },
+    "imageToPdf": {
+        "pdfQuality": "PDF 质量",
+        "highQuality": "高质量（文件较大）",
+        "mediumQuality": "中等质量（平衡）",
+        "lowQuality": "低质量（文件较小）",
+        "qualityHint": "控制嵌入 PDF 时的图片压缩",
+        "convertToPdf": "转换为 PDF"
     },
     "about": {
         "hero": {

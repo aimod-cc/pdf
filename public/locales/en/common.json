@@ -204,7 +204,10 @@
             "All pages from your uploaded PDFs are shown below.",
             "Simply drag and drop the individual page thumbnails to create the exact order you want for your new file."
         ],
-        "mergePdfs": "Merge PDFs"
+        "mergePdfs": "Merge PDFs",
+        "pagesLabel": "Pages (e.g., 1-3, 5) - Total:",
+        "pagesTotal": "pages",
+        "leaveBlank": "Leave blank for all pages"
     },
     "common": {
         "page": "Page",
@@ -222,6 +225,14 @@
         "success": "Success",
         "file": "File",
         "files": "Files"
+    },
+    "imageToPdf": {
+        "pdfQuality": "PDF Quality",
+        "highQuality": "High Quality (Larger file)",
+        "mediumQuality": "Medium Quality (Balanced)",
+        "lowQuality": "Low Quality (Smaller file)",
+        "qualityHint": "Controls image compression when embedding into PDF",
+        "convertToPdf": "Convert to PDF"
     },
     "about": {
         "hero": {

@@ -338,8 +338,23 @@
     const path = window.location.pathname;
     const langMatch = path.match(/^\/(en|de|zh|vi)(?:\/|$)/);
     const langNames = { en: 'English', de: 'Deutsch', zh: '中文', vi: 'Tiếng Việt' };
-    if (langMatch && currentLanguage) {
-      currentLanguage.textContent = langNames[langMatch[1]] || 'English';
+    
+    let detectedLang = 'en';
+    if (langMatch) {
+      detectedLang = langMatch[1];
+    } else {
+      const storedLang = localStorage.getItem('i18nextLng');
+      if (storedLang && langNames[storedLang]) {
+        detectedLang = storedLang;
+      } else {
+        const browserLang = navigator.language.split('-')[0];
+        if (langNames[browserLang]) {
+          detectedLang = browserLang;
+        }
+      }
+    }
+    if (currentLanguage) {
+      currentLanguage.textContent = langNames[detectedLang] || 'English';
     }
     
     if (languageBtn && languageMenu) {
