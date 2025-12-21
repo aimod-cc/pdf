@@ -13,7 +13,16 @@
   <link rel="alternate" hreflang="de" href="/de/pdf-multi-tool.html" />
   <link rel="alternate" hreflang="vi" href="/vi/pdf-multi-tool.html" />
   <link rel="alternate" hreflang="x-default" href="/en/pdf-multi-tool.html" />
-  <link href="/src/css/styles.css" rel="stylesheet" />
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+    <link href="/src/css/styles.css" rel="stylesheet" />
 
   <style>
     /* Hide scrollbar for toolbar overflow */
@@ -43,34 +52,53 @@
   </style>
 </head>
 
-<body class="antialiased bg-gray-900 h-[100dvh] overflow-hidden flex flex-col">
+<body class="antialiased bg-white dark:bg-gray-900 h-[100dvh] overflow-hidden flex flex-col">
 
   <!-- Navigation -->
-  <nav class="bg-gray-800 border-b border-gray-700 flex-none z-30">
-    <div class="container mx-auto px-4">
-      <div class="flex justify-between items-center h-16">
-        <div class="flex-shrink-0 flex items-center">
-          <img src="/images/favicon.svg" alt="Bento PDF Logo" class="h-8 w-8" />
-          <span class="text-white font-bold text-xl ml-2">
-            <a href="/">BentoPDF</a>
-          </span>
-          <span class="text-gray-400 ml-3 text-sm sm:text-base">PDF Multi Tool</span>
+  <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" id="home-logo">
+                    <img src="/images/favicon.svg" alt="Bento PDF Logo" class="h-8 w-8" />
+                    <span class="text-gray-900 dark:text-white font-bold text-xl ml-2">
+                        <a href="/">BentoPDF</a>
+                    </span>
+                </div>
+
+                <!-- Theme Toggle & Language Switcher -->
+                <div class="flex items-center gap-2">
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" title="Toggle theme">
+                        <i data-lucide="sun" class="w-5 h-5 hidden" id="theme-light-icon"></i>
+                        <i data-lucide="moon" class="w-5 h-5" id="theme-dark-icon"></i>
+                    </button>
+                    
+                    <!-- Language Switcher -->
+                    <div class="relative" id="language-dropdown">
+                        <button id="language-btn" class="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                            <span id="current-language" class="text-sm font-medium hidden sm:inline">English</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        <div id="language-menu" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50">
+                            <a href="/en/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-t-lg" data-lang="en">English</a>
+                            <a href="/de/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white" data-lang="de">Deutsch</a>
+                            <a href="/zh/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white" data-lang="zh">中文</a>
+                            <a href="/vi/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-b-lg" data-lang="vi">Tiếng Việt</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button id="close-tool-btn"
-          class="flex items-center gap-1 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
-          <i data-lucide="x" class="w-4 h-4 sm:w-5 sm:h-5"></i> <span data-i18n="common.close">Close</span>
-        </button>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
   <!-- Main Container -->
   <div class="flex flex-col flex-1 overflow-hidden relative">
 
     <!-- Toolbar -->
-    <div class="bg-gray-800 border-b border-gray-700 p-2 sm:p-3 toolbar-container flex-none z-20">
+    <div class="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-2 sm:p-3 toolbar-container flex-none z-20">
       <div
-        class="flex flex-wrap items-center justify-center sm:justify-start gap-2 bg-gray-900 p-2 sm:p-4 rounded-lg w-full">
+        class="flex flex-wrap items-center justify-center sm:justify-start gap-2 bg-gray-200 dark:bg-gray-900 p-2 sm:p-4 rounded-lg w-full">
 
         <!-- Upload -->
         <button id="upload-pdfs-btn"
@@ -80,91 +108,91 @@
           <span class="sm:hidden" data-i18n="multiTool.upload">Upload</span>
         </button>
 
-        <div class="border-l border-gray-600 h-5 sm:h-6 mx-1"></div>
+        <div class="border-l border-gray-300 dark:border-gray-600 h-5 sm:h-6 mx-1"></div>
 
 
         <!-- Add Blank -->
         <button id="add-blank-page-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="file-plus" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden sm:inline" data-i18n="multiTool.addBlankPage">Add Blank Page</span>
         </button>
 
-        <div class="border-l border-gray-600 h-5 sm:h-6 mx-1"></div>
-        <span class="text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.edit">Edit:</span>
+        <div class="border-l border-gray-300 dark:border-gray-600 h-5 sm:h-6 mx-1"></div>
+        <span class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.edit">Edit:</span>
 
 
         <!-- Undo / Redo / Reset -->
         <button id="undo-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="undo-2" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden lg:inline" data-i18n="multiTool.undo">Undo</span>
         </button>
 
         <button id="redo-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="redo-2" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden lg:inline" data-i18n="multiTool.redo">Redo</span>
         </button>
 
         <button id="reset-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="refresh-ccw" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden lg:inline" data-i18n="multiTool.reset">Reset</span>
         </button>
 
-        <div class="border-l border-gray-600 h-5 sm:h-6 mx-1"></div>
+        <div class="border-l border-gray-300 dark:border-gray-600 h-5 sm:h-6 mx-1"></div>
 
         <!-- Selection -->
-        <span class="text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.selection">Selection:</span>
+        <span class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.selection">Selection:</span>
 
         <button id="select-all-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="check-square" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden lg:inline" data-i18n="multiTool.selectAll">Select All</span>
         </button>
 
         <button id="deselect-all-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="square" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden lg:inline" data-i18n="multiTool.deselectAll">Deselect All</span>
         </button>
 
-        <div class="border-l border-gray-600 h-5 sm:h-6 mx-1"></div>
+        <div class="border-l border-gray-300 dark:border-gray-600 h-5 sm:h-6 mx-1"></div>
 
         <!-- Rotate -->
-        <span class="text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.rotate">Rotate:</span>
+        <span class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.rotate">Rotate:</span>
         <button id="bulk-rotate-left-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="rotate-ccw" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden xl:inline" data-i18n="multiTool.rotateLeft">Left</span>
         </button>
 
         <button id="bulk-rotate-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="rotate-cw" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden xl:inline" data-i18n="multiTool.rotateRight">Right</span>
         </button>
 
-        <div class="border-l border-gray-600 h-5 sm:h-6 mx-1"></div>
-        <span class="text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.transform">Transform:</span>
+        <div class="border-l border-gray-300 dark:border-gray-600 h-5 sm:h-6 mx-1"></div>
+        <span class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.transform">Transform:</span>
 
 
         <!-- Duplicate / Split -->
         <button id="bulk-duplicate-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="copy" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden xl:inline" data-i18n="multiTool.duplicate">Duplicate</span>
         </button>
 
         <button id="bulk-split-btn"
-          class="flex items-center gap-1 sm:gap-2 bg-gray-700 hover:bg-gray-600 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
+          class="flex items-center gap-1 sm:gap-2 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="scissors" class="w-3 h-3 sm:w-4 sm:h-4"></i>
           <span class="hidden xl:inline" data-i18n="multiTool.split">Split</span>
         </button>
 
-        <div class="border-l border-gray-600 h-5 sm:h-6 mx-1"></div>
-        <span class="text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.clear">Clear:</span>
+        <div class="border-l border-gray-300 dark:border-gray-600 h-5 sm:h-6 mx-1"></div>
+        <span class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.clear">Clear:</span>
 
 
         <!-- Delete -->
@@ -174,10 +202,10 @@
           <span class="hidden xl:inline" data-i18n="multiTool.delete">Delete</span>
         </button>
 
-        <div class="border-l border-gray-600 h-5 sm:h-6 mx-1"></div>
+        <div class="border-l border-gray-300 dark:border-gray-600 h-5 sm:h-6 mx-1"></div>
 
         <!-- Download -->
-        <span class="text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.download">Download:</span>
+        <span class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm md:inline" data-i18n="multiTool.download">Download:</span>
         <button id="bulk-download-btn"
           class="flex items-center gap-1 sm:gap-2 bg-green-600 hover:bg-green-700 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded text-xs sm:text-sm md:text-base">
           <i data-lucide="download" class="w-3 h-3 sm:w-4 sm:h-4"></i>
@@ -193,14 +221,14 @@
     </div>
 
     <!-- Content Area -->
-    <div id="main-scroll-container" class="flex-1 overflow-auto p-3 pb-24 sm:p-4 sm:pb-8 md:pt-4 md:pb-4">
+    <div id="main-scroll-container" class="flex-1 overflow-auto p-3 pb-24 sm:p-4 sm:pb-8 md:pt-4 md:pb-4 bg-white dark:bg-gray-900">
       <div id="upload-area"
-        class="hidden border-2 border-dashed border-gray-600 rounded-lg p-6 sm:p-12 text-center max-w-full cursor-pointer"
+        class="hidden border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 sm:p-12 text-center max-w-full cursor-pointer bg-gray-50 dark:bg-transparent"
         onclick="document.getElementById('pdf-file-input').click()">
         <i data-lucide="upload-cloud" class="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-gray-400 mb-3 sm:mb-4"></i>
-        <p class="text-gray-300 text-base sm:text-lg mb-1 sm:mb-2" data-i18n="multiTool.uploadPdfFiles">Select PDF Files
+        <p class="text-gray-700 dark:text-gray-300 text-base sm:text-lg mb-1 sm:mb-2" data-i18n="multiTool.uploadPdfFiles">Select PDF Files
         </p>
-        <p class="text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4" data-i18n="multiTool.dragAndDrop">Drag and drop PDF
+        <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mb-3 sm:mb-4" data-i18n="multiTool.dragAndDrop">Drag and drop PDF
           files here, or click to select</p>
         <input type="file" id="pdf-file-input" accept="application/pdf" multiple class="hidden">
         <button onclick="event.stopPropagation(); document.getElementById('pdf-file-input').click()"
@@ -217,13 +245,13 @@
 
   <!-- Loading Overlay -->
   <div id="loading-overlay" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
-    <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
       <div class="flex items-center justify-center mb-4">
         <i data-lucide="loader" class="w-12 h-12 text-indigo-400 animate-spin"></i>
       </div>
-      <p id="loading-text" class="text-white text-center text-lg mb-4" data-i18n="multiTool.renderingPages">Rendering
+      <p id="loading-text" class="text-gray-900 dark:text-white text-center text-lg mb-4" data-i18n="multiTool.renderingPages">Rendering
         pages...</p>
-      <div class="w-full bg-gray-700 rounded-full h-2.5">
+      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
         <div id="loading-progress" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
           style="width: 0%"></div>
       </div>
@@ -232,12 +260,12 @@
 
   <!-- Modal -->
   <div id="modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
-    <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 border border-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 border border-gray-200 dark:border-gray-700">
       <div class="flex items-center justify-center mb-4">
         <div id="modal-icon"></div>
       </div>
-      <h3 id="modal-title" class="text-xl font-bold text-white text-center mb-2"></h3>
-      <p id="modal-message" class="text-gray-300 text-center mb-6"></p>
+      <h3 id="modal-title" class="text-xl font-bold text-gray-900 dark:text-white text-center mb-2"></h3>
+      <p id="modal-message" class="text-gray-600 dark:text-gray-300 text-center mb-6"></p>
       <button id="modal-close-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">
         Close
       </button>
@@ -250,6 +278,61 @@
   <!-- Scripts -->
   <script type="module" src="/src/js/logic/pdf-multi-tool.ts"></script>
   <script type="module" src="/src/js/main.ts"></script>
+
+  <script type="module">
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const lightIcon = document.getElementById('theme-light-icon');
+    const darkIcon = document.getElementById('theme-dark-icon');
+    const html = document.documentElement;
+    
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    function updateTheme(dark) {
+      if (dark) {
+        html.classList.add('dark');
+        lightIcon?.classList.remove('hidden');
+        darkIcon?.classList.add('hidden');
+      } else {
+        html.classList.remove('dark');
+        lightIcon?.classList.add('hidden');
+        darkIcon?.classList.remove('hidden');
+      }
+    }
+    
+    updateTheme(isDark);
+    
+    themeToggle?.addEventListener('click', () => {
+      const isDarkNow = html.classList.contains('dark');
+      localStorage.setItem('theme', isDarkNow ? 'light' : 'dark');
+      updateTheme(!isDarkNow);
+    });
+
+    // Language dropdown toggle
+    const languageBtn = document.getElementById('language-btn');
+    const languageMenu = document.getElementById('language-menu');
+    const currentLanguage = document.getElementById('current-language');
+    
+    const path = window.location.pathname;
+    const langMatch = path.match(/^\/(en|de|zh|vi)(?:\/|$)/);
+    const langNames = { en: 'English', de: 'Deutsch', zh: '中文', vi: 'Tiếng Việt' };
+    if (langMatch && currentLanguage) {
+      currentLanguage.textContent = langNames[langMatch[1]] || 'English';
+    }
+    
+    if (languageBtn && languageMenu) {
+      languageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        languageMenu.classList.toggle('hidden');
+      });
+      
+      document.addEventListener('click', () => {
+        languageMenu.classList.add('hidden');
+      });
+    }
+  </script>
 </body>
 
 </html>

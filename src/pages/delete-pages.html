@@ -11,39 +11,69 @@
     <link rel="alternate" hreflang="de" href="/de/delete-pages.html" />
     <link rel="alternate" hreflang="vi" href="/vi/delete-pages.html" />
   <link rel="alternate" hreflang="x-default" href="/en/delete-pages.html" />
-  <link href="/src/css/styles.css" rel="stylesheet" />
+  <script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+    <link href="/src/css/styles.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
 </head>
 
-<body class="antialiased bg-gray-900">
-    <nav class="bg-gray-800 border-b border-gray-700 sticky top-0 z-30">
+<body class="antialiased">
+    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center cursor-pointer" id="home-logo">
                     <img src="/images/favicon.svg" alt="Bento PDF Logo" class="h-8 w-8" />
-                    <span class="text-white font-bold text-xl ml-2"><a href="/">BentoPDF</a></span>
+                    <span class="text-gray-900 dark:text-white font-bold text-xl ml-2">
+                        <a href="/">BentoPDF</a>
+                    </span>
                 </div>
-                <div class="hidden md:flex items-center space-x-8 text-white">
-                    <a href="/" class="nav-link" data-i18n="nav.home">Home</a>
-                    <a href="./about.html" class="nav-link">About</a>
-                    <a href="/" class="nav-link" data-i18n="nav.allTools">All Tools</a>
+
+                <!-- Theme Toggle & Language Switcher -->
+                <div class="flex items-center gap-2">
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" title="Toggle theme">
+                        <i data-lucide="sun" class="w-5 h-5 hidden" id="theme-light-icon"></i>
+                        <i data-lucide="moon" class="w-5 h-5" id="theme-dark-icon"></i>
+                    </button>
+                    
+                    <!-- Language Switcher -->
+                    <div class="relative" id="language-dropdown">
+                        <button id="language-btn" class="flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                            <span id="current-language" class="text-sm font-medium hidden sm:inline">English</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        <div id="language-menu" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50">
+                            <a href="/en/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-t-lg" data-lang="en">English</a>
+                            <a href="/de/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white" data-lang="de">Deutsch</a>
+                            <a href="/zh/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white" data-lang="zh">中文</a>
+                            <a href="/vi/" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-b-lg" data-lang="vi">Tiếng Việt</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div id="uploader" class="min-h-screen flex flex-col items-center justify-start py-12 p-4 bg-gray-900">
+    <div id="uploader" class="min-h-screen flex flex-col items-center justify-start py-12 p-4">
         <div id="tool-uploader"
-            class="bg-gray-800 rounded-xl shadow-xl px-4 py-8 md:p-8 max-w-2xl w-full text-gray-200 border border-gray-700">
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-xl px-4 py-8 md:p-8 max-w-2xl w-full text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
             <button id="back-to-tools"
                 class="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 mb-6 font-semibold">
                 <i data-lucide="arrow-left" class="cursor-pointer"></i>
                 <span class="cursor-pointer">Back to Tools</span>
             </button>
-            <h1 class="text-2xl font-bold text-white mb-2" data-i18n="tools:deletePages.name">Delete Pages</h1>
-            <p class="text-gray-400 mb-6" data-i18n="tools:deletePages.subtitle">Remove specific pages or ranges of pages from your PDF file.</p>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="tools:deletePages.name">Delete Pages</h1>
+            <p class="text-gray-500 dark:text-gray-400 mb-6" data-i18n="tools:deletePages.subtitle">Remove specific pages or ranges of pages from your PDF file.</p>
             <div id="drop-zone"
-                class="relative flex flex-col items-center justify-center w-full h-48 md:h-64 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer bg-gray-900 hover:bg-gray-700 transition-colors duration-300">
+                class="relative flex flex-col items-center justify-center w-full h-48 md:h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-300">
                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                     <i data-lucide="upload-cloud" class="w-10 h-10 mb-3 text-gray-400"></i>
                     <p class="mb-2 text-sm text-gray-400"><span class="font-semibold" data-i18n="upload.clickToSelect">Click to select a file</span> <span data-i18n="upload.orDragAndDrop">or drag and drop</span></p>
@@ -85,6 +115,61 @@
     <script type="module" src="/src/js/logic/delete-pages-page.ts"></script>
     <script type="module" src="/src/js/mobileMenu.ts"></script>
   <script type="module" src="/src/js/main.ts"></script>
+
+  <script type="module">
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const lightIcon = document.getElementById('theme-light-icon');
+    const darkIcon = document.getElementById('theme-dark-icon');
+    const html = document.documentElement;
+    
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    function updateTheme(dark) {
+      if (dark) {
+        html.classList.add('dark');
+        lightIcon?.classList.remove('hidden');
+        darkIcon?.classList.add('hidden');
+      } else {
+        html.classList.remove('dark');
+        lightIcon?.classList.add('hidden');
+        darkIcon?.classList.remove('hidden');
+      }
+    }
+    
+    updateTheme(isDark);
+    
+    themeToggle?.addEventListener('click', () => {
+      const isDarkNow = html.classList.contains('dark');
+      localStorage.setItem('theme', isDarkNow ? 'light' : 'dark');
+      updateTheme(!isDarkNow);
+    });
+
+    // Language dropdown toggle
+    const languageBtn = document.getElementById('language-btn');
+    const languageMenu = document.getElementById('language-menu');
+    const currentLanguage = document.getElementById('current-language');
+    
+    const path = window.location.pathname;
+    const langMatch = path.match(/^\/(en|de|zh|vi)(?:\/|$)/);
+    const langNames = { en: 'English', de: 'Deutsch', zh: '中文', vi: 'Tiếng Việt' };
+    if (langMatch && currentLanguage) {
+      currentLanguage.textContent = langNames[langMatch[1]] || 'English';
+    }
+    
+    if (languageBtn && languageMenu) {
+      languageBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        languageMenu.classList.toggle('hidden');
+      });
+      
+      document.addEventListener('click', () => {
+        languageMenu.classList.add('hidden');
+      });
+    }
+  </script>
 </body>
 
 </html>

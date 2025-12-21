@@ -1,32 +1,14 @@
-<!doctype html>
-<html lang="en">
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDF to JSON Converter - BentoPDF</title>
-  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
-  <link rel="icon" type="image/png" href="/images/favicon.png" />
-  <link rel="apple-touch-icon" href="/images/favicon.png" />
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="alternate" hreflang="en" href="/en/pdf-to-json.html" />
-  <link rel="alternate" hreflang="de" href="/de/pdf-to-json.html" />
-  <link rel="alternate" hreflang="vi" href="/vi/pdf-to-json.html" />
-  <link rel="alternate" hreflang="x-default" href="/en/pdf-to-json.html" />
-  <script>
-    (function() {
-      const saved = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
-        document.documentElement.classList.add('dark');
-      }
-    })();
-  </script>
-    <link href="/src/css/styles.css" rel="stylesheet" />
-</head>
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-<body class="antialiased">
-  <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+const pagesDir = path.join(__dirname, '../src/pages');
+
+// New navigation HTML
+const newNav = `<nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0 flex items-center cursor-pointer" id="home-logo">
@@ -61,59 +43,10 @@
                 </div>
             </div>
         </div>
-    </nav>
+    </nav>`;
 
-  <div class="min-h-screen flex items-center justify-center p-4 bg-gray-900">
-    <div id="tool-uploader"
-      class="bg-gray-800 rounded-xl shadow-xl p-8 max-w-2xl w-full text-gray-200 border border-gray-700">
-      <button id="back-to-tools"
-        class="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 mb-6 font-semibold">
-        <i data-lucide="arrow-left" class="cursor-pointer"></i>
-        <span class="cursor-pointer" data-i18n="tools.backToTools"> Back to Tools </span>
-      </button>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="tools:pdfToJson.name">PDF to JSON Converter</h1>
-      <p class="text-gray-500 dark:text-gray-400 mb-6" data-i18n="tools:pdfToJson.subtitle">
-        Upload multiple PDF files to convert them all to JSON format. Files will be downloaded as a ZIP archive.
-      </p>
-
-      <div class="upload-section mb-6">
-        <div
-          class="relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer bg-gray-700 hover:bg-gray-600 transition-colors duration-300">
-          <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <i data-lucide="upload-cloud" class="w-10 h-10 mb-3 text-gray-400"></i>
-            <p class="mb-2 text-sm text-gray-300">
-              <span class="font-semibold">Click to select files</span> <span data-i18n="upload.orDragAndDrop">or drag
-                and drop</span>
-            </p>
-            <p class="text-xs text-gray-500">Multiple PDF files</p>
-            <p class="text-xs text-gray-500" data-i18n="upload.filesNeverLeave">Your files never leave your device.</p>
-          </div>
-          <input type="file" id="pdfFiles" accept="application/pdf" multiple
-            class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
-        </div>
-
-        <!-- File Display Area -->
-        <div id="fileList" class="mt-4 hidden"></div>
-
-        <button id="convertBtn" disabled class="btn-gradient w-full mt-6">
-          Convert to JSON
-        </button>
-      </div>
-
-      <!-- Status Message -->
-      <div id="status-message" class="mt-4 hidden p-3 rounded-lg text-sm"></div>
-    </div>
-  </div>
-
-  
-  <script type="module" src="/src/js/logic/pdf-to-json.ts"></script>
-  <script type="module" src="/src/js/utils/lucide-init.ts"></script>
-  <script type="module" src="/src/js/utils/full-width.ts"></script>
-  <script type="module" src="/src/js/utils/simple-mode-footer.ts"></script>
-  <script type="module" src="/src/version.ts"></script>
-  <script type="module" src="/src/js/mobileMenu.ts"></script>
-  <script type="module" src="/src/js/main.ts"></script>
-
+// Theme script to add before </body>
+const themeScript = `
   <script type="module">
     // Theme toggle
     const themeToggle = document.getElementById('theme-toggle');
@@ -151,7 +84,7 @@
     const currentLanguage = document.getElementById('current-language');
     
     const path = window.location.pathname;
-    const langMatch = path.match(/^\/(en|de|zh|vi)(?:\/|$)/);
+    const langMatch = path.match(/^\\/(en|de|zh|vi)(?:\\/|$)/);
     const langNames = { en: 'English', de: 'Deutsch', zh: '中文', vi: 'Tiếng Việt' };
     if (langMatch && currentLanguage) {
       currentLanguage.textContent = langNames[langMatch[1]] || 'English';
@@ -168,6 +101,89 @@
       });
     }
   </script>
-</body>
+</body>`;
 
-</html>
+// Theme init script for <head> to prevent flash
+const themeInitScript = `<script>
+    (function() {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>`;
+
+// Process each HTML file
+const files = fs.readdirSync(pagesDir).filter(f => f.endsWith('.html'));
+
+files.forEach(file => {
+    const filePath = path.join(pagesDir, file);
+    let content = fs.readFileSync(filePath, 'utf8');
+    
+    // Add theme init script in <head> to prevent flash
+    if (!content.includes("(function() {")) {
+        content = content.replace(
+            /(<link href="\/src\/css\/styles\.css")/,
+            `${themeInitScript}\n    $1`
+        );
+    }
+    
+    // Replace body class
+    content = content.replace(
+        /<body class="antialiased bg-gray-900">/g,
+        '<body class="antialiased">'
+    );
+    
+    // Replace nav section
+    content = content.replace(
+        /<nav class="bg-gray-800[\s\S]*?<\/nav>/,
+        newNav
+    );
+    
+    // Update uploader div background
+    content = content.replace(
+        /id="uploader" class="min-h-screen flex flex-col items-center justify-start py-12 p-4 bg-gray-900"/g,
+        'id="uploader" class="min-h-screen flex flex-col items-center justify-start py-12 p-4"'
+    );
+    
+    // Update tool-uploader div
+    content = content.replace(
+        /id="tool-uploader"[\s\S]*?class="bg-gray-800 rounded-xl shadow-xl px-4 py-8 md:p-8 max-w-2xl w-full text-gray-200 border border-gray-700"/g,
+        'id="tool-uploader"\n            class="bg-white dark:bg-gray-800 rounded-xl shadow-xl px-4 py-8 md:p-8 max-w-2xl w-full text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700"'
+    );
+    
+    // Update h1 title
+    content = content.replace(
+        /class="text-2xl font-bold text-white mb-2"/g,
+        'class="text-2xl font-bold text-gray-900 dark:text-white mb-2"'
+    );
+    
+    // Update subtitle
+    content = content.replace(
+        /class="text-gray-400 mb-6"/g,
+        'class="text-gray-500 dark:text-gray-400 mb-6"'
+    );
+    
+    // Update drop-zone
+    content = content.replace(
+        /id="drop-zone"[\s\S]*?class="relative flex flex-col items-center justify-center w-full h-48 md:h-64 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer bg-gray-900 hover:bg-gray-700/g,
+        'id="drop-zone"\n                class="relative flex flex-col items-center justify-center w-full h-48 md:h-64 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700'
+    );
+    
+    // Remove footer
+    content = content.replace(/<footer[\s\S]*?<\/footer>/g, '');
+    
+    // Add theme script before </body>
+    if (!content.includes('function updateTheme')) {
+        content = content.replace(
+            /<\/body>/,
+            themeScript
+        );
+    }
+    
+    fs.writeFileSync(filePath, content, 'utf8');
+    console.log(`Updated: ${file}`);
+});
+
+console.log(`\nDone! Updated ${files.length} files.`);
