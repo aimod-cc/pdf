@@ -24,6 +24,12 @@ export const getLanguageFromUrl = (): SupportedLanguage => {
         return storedLang as SupportedLanguage;
     }
 
+    // 检测浏览器语言
+    const browserLang = navigator.language.split('-')[0];
+    if (supportedLanguages.includes(browserLang as SupportedLanguage)) {
+        return browserLang as SupportedLanguage;
+    }
+
     return 'en';
 };
 

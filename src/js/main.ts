@@ -262,7 +262,7 @@ const init = async () => {
       categoryGroup.className = 'category-group col-span-full';
 
       const title = document.createElement('h2');
-      title.className = 'text-xl font-bold text-indigo-400 mb-4 mt-8 first:mt-0 text-white';
+      title.className = 'text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-4 mt-8 first:mt-0';
       const categoryKey = categoryTranslationKeys[category.name];
       title.textContent = categoryKey ? t(categoryKey) : category.name;
 
@@ -277,20 +277,20 @@ const init = async () => {
           toolCard = document.createElement('a');
           toolCard.href = tool.href;
           toolCard.className =
-            'tool-card block bg-gray-800 rounded-xl p-4 cursor-pointer flex flex-col items-center justify-center text-center no-underline hover:shadow-lg transition duration-200';
+            'tool-card block bg-white dark:bg-gray-800 rounded-xl p-4 cursor-pointer flex flex-col items-center justify-center text-center no-underline hover:shadow-lg transition duration-200';
         } else {
           toolCard = document.createElement('div');
           toolCard.className =
-            'tool-card bg-gray-800 rounded-xl p-4 cursor-pointer flex flex-col items-center justify-center text-center hover:shadow-lg transition duration-200';
+            'tool-card bg-white dark:bg-gray-800 rounded-xl p-4 cursor-pointer flex flex-col items-center justify-center text-center hover:shadow-lg transition duration-200';
           toolCard.dataset.toolId = getToolId(tool);
         }
 
         const icon = document.createElement('i');
-        icon.className = 'w-10 h-10 mb-3 text-indigo-400';
+        icon.className = 'w-10 h-10 mb-3 text-indigo-500 dark:text-indigo-400';
         icon.setAttribute('data-lucide', tool.icon);
 
         const toolName = document.createElement('h3');
-        toolName.className = 'font-semibold text-white';
+        toolName.className = 'font-semibold text-gray-900 dark:text-white';
         const toolKey = toolTranslationKeys[tool.name];
         toolName.textContent = toolKey ? t(`${toolKey}.name`) : tool.name;
 
@@ -298,7 +298,7 @@ const init = async () => {
 
         if (tool.subtitle) {
           const toolSubtitle = document.createElement('p');
-          toolSubtitle.className = 'text-xs text-gray-400 mt-1 px-2';
+          toolSubtitle.className = 'text-xs text-gray-500 dark:text-gray-400 mt-1 px-2';
           toolSubtitle.textContent = toolKey ? t(`${toolKey}.subtitle`) : tool.subtitle;
           toolCard.appendChild(toolSubtitle);
         }
@@ -440,12 +440,22 @@ const init = async () => {
   const preferencesTabFooter = document.getElementById('preferences-tab-footer');
   const resetShortcutsBtn = document.getElementById('reset-shortcuts-btn');
 
+  // Helper function to set inactive tab styles
+  const setInactiveTabStyle = (btn: HTMLElement) => {
+    btn.classList.remove('bg-indigo-600', 'text-white');
+    btn.classList.add('text-gray-600', 'dark:text-gray-300');
+  };
+
+  // Helper function to set active tab styles
+  const setActiveTabStyle = (btn: HTMLElement) => {
+    btn.classList.add('bg-indigo-600', 'text-white');
+    btn.classList.remove('text-gray-600', 'dark:text-gray-300');
+  };
+
   if (shortcutsTabBtn && preferencesTabBtn) {
     shortcutsTabBtn.addEventListener('click', () => {
-      shortcutsTabBtn.classList.add('bg-indigo-600', 'text-white');
-      shortcutsTabBtn.classList.remove('text-gray-300');
-      preferencesTabBtn.classList.remove('bg-indigo-600', 'text-white');
-      preferencesTabBtn.classList.add('text-gray-300');
+      setActiveTabStyle(shortcutsTabBtn);
+      setInactiveTabStyle(preferencesTabBtn);
       shortcutsTabContent?.classList.remove('hidden');
       preferencesTabContent?.classList.add('hidden');
       shortcutsTabFooter?.classList.remove('hidden');
@@ -454,10 +464,8 @@ const init = async () => {
     });
 
     preferencesTabBtn.addEventListener('click', () => {
-      preferencesTabBtn.classList.add('bg-indigo-600', 'text-white');
-      preferencesTabBtn.classList.remove('text-gray-300');
-      shortcutsTabBtn.classList.remove('bg-indigo-600', 'text-white');
-      shortcutsTabBtn.classList.add('text-gray-300');
+      setActiveTabStyle(preferencesTabBtn);
+      setInactiveTabStyle(shortcutsTabBtn);
       preferencesTabContent?.classList.remove('hidden');
       shortcutsTabContent?.classList.add('hidden');
       preferencesTabFooter?.classList.remove('hidden');
@@ -718,7 +726,7 @@ const init = async () => {
       section.className = 'category-section mb-6 last:mb-0';
 
       const header = document.createElement('h3');
-      header.className = 'text-gray-400 text-xs font-bold uppercase tracking-wider mb-3 pl-1';
+      header.className = 'text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider mb-3 pl-1';
       // Translate category name
       const categoryKey = categoryTranslationKeys[category.name];
       header.textContent = categoryKey ? t(categoryKey) : category.name;
@@ -736,17 +744,17 @@ const init = async () => {
         const currentShortcut = allShortcuts.get(toolId) || '';
 
         const item = document.createElement('div');
-        item.className = 'shortcut-item flex items-center justify-between p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors';
+        item.className = 'shortcut-item flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors';
 
         const left = document.createElement('div');
         left.className = 'flex items-center gap-3';
 
         const icon = document.createElement('i');
-        icon.className = 'w-5 h-5 text-indigo-400';
+        icon.className = 'w-5 h-5 text-indigo-500 dark:text-indigo-400';
         icon.setAttribute('data-lucide', tool.icon);
 
         const name = document.createElement('span');
-        name.className = 'text-gray-200 font-medium';
+        name.className = 'text-gray-700 dark:text-gray-200 font-medium';
         const toolKey = toolTranslationKeys[tool.name];
         name.textContent = toolKey ? t(`${toolKey}.name`) : tool.name;
 
@@ -757,13 +765,13 @@ const init = async () => {
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.className = 'shortcut-input w-32 bg-gray-800 border border-gray-600 text-white text-center text-sm rounded px-2 py-1 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all';
+        input.className = 'shortcut-input w-32 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-center text-sm rounded px-2 py-1 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all';
         input.placeholder = t('settings.clickToSet');
         input.value = formatShortcutDisplay(currentShortcut, isMac);
         input.readOnly = true;
 
         const clearBtn = document.createElement('button');
-        clearBtn.className = 'absolute -right-2 -top-2 bg-gray-700 hover:bg-red-600 text-white rounded-full p-0.5 hidden group-hover:block shadow-sm';
+        clearBtn.className = 'absolute -right-2 -top-2 bg-gray-300 dark:bg-gray-700 hover:bg-red-600 text-gray-700 dark:text-white hover:text-white rounded-full p-0.5 hidden group-hover:block shadow-sm';
         clearBtn.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
         if (currentShortcut) {
           right.classList.add('group');

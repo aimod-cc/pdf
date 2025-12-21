@@ -17,6 +17,8 @@
 @import 'cropperjs/dist/cropper.css';
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-dancing: 'Dancing Script', cursive;
@@ -48,17 +50,44 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Light theme (default) */
 body {
   font-family: 'DM Sans', sans-serif;
+  background-color: #f9fafb;
+  color: #374151;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark theme */
+html.dark body {
   background-color: #111827;
   color: #d1d5db;
 }
 
+/* Navigation - Light */
+nav {
+  background-color: #ffffff;
+  border-color: #e5e7eb;
+}
+
+html.dark nav {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+/* Tool cards - Light */
 .tool-card {
   transition:
     transform 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
-  border: 1px solid #374151;
+    box-shadow 0.2s ease-in-out,
+    background-color 0.3s ease;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+html.dark .tool-card {
+  border-color: #374151;
+  background-color: #1f2937;
 }
 
 .tool-card:hover {
@@ -84,23 +113,35 @@ input[type='file']::file-selector-button {
   @apply bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg cursor-pointer hover:bg-indigo-700 transition-colors duration-200 mr-4;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Light theme */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: #f3f4f6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4f46e5;
+  background: #9ca3af;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Custom scrollbar - Dark theme */
+html.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: #4f46e5;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
   background: #4338ca;
-  /* indigo-700 */
 }
 
 /* Style for drag-and-drop placeholder */
@@ -225,20 +266,32 @@ footer a {
 }
 
 .feature-card {
-  background-color: #1f2937;
-  /* bg-gray-800 */
+  background-color: #ffffff;
   padding: 24px;
   border-radius: 8px;
-  /* rounded-lg */
   text-align: center;
+  border: 1px solid #e5e7eb;
+}
+
+html.dark .feature-card {
+  background-color: #1f2937;
+  border-color: #374151;
 }
 
 .nav-link {
-  @apply text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors;
+  @apply text-gray-600 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors;
+}
+
+html.dark .nav-link {
+  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
 }
 
 .mobile-nav-link {
-  @apply text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors;
+  @apply text-gray-600 hover:bg-gray-100 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium transition-colors;
+}
+
+html.dark .mobile-nav-link {
+  @apply text-gray-300 hover:bg-gray-700 hover:text-white;
 }
 
 .marker-slanted {
@@ -383,40 +436,31 @@ footer a {
 
 /* Testimonial Card Styles */
 .testimonial-card {
-  background-color: #1f2937;
-  /* bg-gray-800 */
+  background-color: #ffffff;
   padding: 24px;
   border-radius: 0.75rem;
-  /* rounded-xl */
-  border: 1px solid #374151;
-  /* border-gray-700 */
+  border: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
 }
 
-.pill {
-  background-color: #374151;
-  /* bg-gray-700 */
-  color: #d1d5db;
-  /* text-gray-300 */
-  padding: 8px 16px;
-  border-radius: 9999px;
-  /* rounded-full */
-  font-size: 14px;
-  font-weight: 500;
+html.dark .testimonial-card {
+  background-color: #1f2937;
+  border-color: #374151;
 }
 
 .pill {
-  background-color: #374151;
-  /* bg-gray-700 */
-  color: #d1d5db;
-  /* text-gray-300 */
-  /* Smaller padding and font size by default for mobile */
+  background-color: #e5e7eb;
+  color: #374151;
   padding: 6px 12px;
   font-size: 12px;
   border-radius: 9999px;
-  /* rounded-full */
   font-weight: 500;
+}
+
+html.dark .pill {
+  background-color: #374151;
+  color: #d1d5db;
 }
 
 /* On small screens (640px) and up, revert to the larger size */
@@ -550,21 +594,34 @@ button:disabled,
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
-/* Custom Scrollbar for Modal Content */
+/* Custom Scrollbar for Modal Content - Light theme */
 #shortcuts-list::-webkit-scrollbar {
   width: 6px;
 }
 
 #shortcuts-list::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: #f3f4f6;
 }
 
 #shortcuts-list::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: #d1d5db;
   border-radius: 3px;
 }
 
 #shortcuts-list::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Custom Scrollbar for Modal Content - Dark theme */
+html.dark #shortcuts-list::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+html.dark #shortcuts-list::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+html.dark #shortcuts-list::-webkit-scrollbar-thumb:hover {
   background: #6b7280;
 }
 
