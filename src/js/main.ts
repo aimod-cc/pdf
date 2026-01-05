@@ -8,12 +8,17 @@ import '../css/styles.css';
 import { formatShortcutDisplay, formatStars } from './utils/helpers.js';
 import { APP_VERSION, injectVersion } from '../version.js';
 import { initI18n, applyTranslations, rewriteLinks, injectLanguageSwitcher, createLanguageSwitcher, t } from './i18n/index.js';
+import { initAuth, injectUserMenu } from './auth/index.js';
 
 const init = async () => {
   await initI18n();
   injectLanguageSwitcher();
   applyTranslations();
   document.documentElement.classList.add('i18n-ready');
+
+  // 初始化认证模块
+  initAuth();
+  injectUserMenu();
 
   pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
   if (__SIMPLE_MODE__) {
