@@ -98,7 +98,7 @@ export async function checkAuthStatus(): Promise<User | null> {
  */
 export function goLogin() {
   const returnUrl = encodeURIComponent(window.location.href);
-  window.location.href = `${AUTH_CENTER_URL}/login?redirect=${returnUrl}`;
+  window.location.href = `${AUTH_CENTER_URL}/auth/login?redirect=${returnUrl}`;
 }
 
 /**
@@ -106,7 +106,7 @@ export function goLogin() {
  */
 export function goRegister() {
   const returnUrl = encodeURIComponent(window.location.href);
-  window.location.href = `${AUTH_CENTER_URL}/register?redirect=${returnUrl}`;
+  window.location.href = `${AUTH_CENTER_URL}/auth/register?redirect=${returnUrl}`;
 }
 
 /**
