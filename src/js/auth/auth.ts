@@ -19,6 +19,15 @@ export interface AuthState {
   initialized: boolean;
 }
 
+export interface PublicSettings {
+  allowRegister: boolean;
+  allowGoogleLogin: boolean;
+  allowGithubLogin: boolean;
+}
+
+// 公开设置缓存
+let publicSettings: PublicSettings | null = null;
+
 // 全局认证状态
 let authState: AuthState = {
   user: null,
@@ -107,6 +116,47 @@ export function goLogin() {
 export function goRegister() {
   const returnUrl = encodeURIComponent(window.location.href);
   window.location.href = `${AUTH_CENTER_URL}/auth/register?redirect=${returnUrl}`;
+}
+
+/**
+ * 跳转到 Google 登录
+ */
+export function goGoogleLogin() {
+  const returnUrl = encodeURIComponent(window.location.href);
+  window.location.href = `${AUTH_CENTER_URL}/api/auth/oauth/google?redirect=${returnUrl}`;
+}
+
+/**
+ * 获取公开设置（是否允许注册、第三方登录等）
+ */
+export async function getPublicSettings(): Promise<PublicSettings> {
+  if (publicSettings) return publicSettings;
+  
+  try {
+    const res = await fetch(`${AUTH_CENTER_URL}/api/auth/public-settings`, {
+      credentials: 'include',
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      publicSettings = {
+        allowRegister: data.data.allow_register === '1',
+        allowGoogleLogin: data.data.allow_google_login === '1',
+        allowGithubLogin: data.data.allow_github_login === '1',
+      };
+      return publicSettings;
+    }
+  } catch (error) {
+    console.error('获取公开设置失败:', error);
+  }
+  
+  // 默认值
+  return {
+    allowRegister: true,
+    allowGoogleLogin: false,
+    allowGithubLogin: false,
+  };
 }
 
 /**

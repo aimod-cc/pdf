@@ -6,12 +6,15 @@ export {
   initAuth, 
   checkAuthStatus, 
   goLogin, 
-  goRegister, 
+  goRegister,
+  goGoogleLogin,
+  getPublicSettings,
   logout,
   getAuthState,
   subscribeAuth,
   type User,
-  type AuthState 
+  type AuthState,
+  type PublicSettings
 } from './auth.js';
 
 export { 
